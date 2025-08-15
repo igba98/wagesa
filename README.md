@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wagesa Event Co - Inventory Management System
 
-## Getting Started
+A modern, responsive inventory and asset movement tracking system built for event rental companies. This frontend-only prototype demonstrates a complete inventory management workflow with role-based access control.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Core Functionality
+- **Inventory Management**: Add, edit, and track items across multiple store locations
+- **Movement Tracking**: Create dispatches, track rentals, and manage returns
+- **Role-Based Access**: Three distinct user roles with appropriate permissions
+- **Real-time Analytics**: Comprehensive reporting with charts and export capabilities
+- **Dark/Light Mode**: Beautiful theme switching with black and white design
+
+### User Roles
+- **Super Admin**: Full system access, user management, settings configuration
+- **Operation**: Create dispatches, manage rentals, view reports
+- **Store Keeper**: Manage inventory, confirm returns, limited dispatch access
+
+### Technical Features
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+- **Modern UI**: Built with shadcn/ui components and Tailwind CSS
+- **State Management**: Zustand for efficient client-side state management
+- **Data Export**: Excel export functionality for reports
+- **Form Validation**: Comprehensive validation with user-friendly error messages
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js 15.4.6 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Icons**: Heroicons
+- **State Management**: Zustand
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+- **Forms**: React Hook Form with Zod validation
+- **Date Handling**: date-fns
+- **Export**: XLSX, file-saver
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd wegesa-mgt
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🎯 Quick Start
+
+### Demo Users
+The system comes with pre-configured demo users:
+
+| Name | Email | Role | Password |
+|------|--------|------|----------|
+| Asha M. | asha@wagesa.co | Super Admin | (Click quick login) |
+| Jonas K. | jonas@wagesa.co | Operation | (Click quick login) |
+| Neema D. | neema@wagesa.co | Store Keeper | (Click quick login) |
+
+### First Steps
+1. **Login**: Use the splash page to navigate to login
+2. **Dashboard**: View key metrics and quick actions
+3. **Inventory**: Add some items to get started
+4. **Movements**: Create your first dispatch
+5. **Reports**: Generate analytics and export data
+
+## 📱 User Interface
+
+### Design Principles
+- **Minimalist**: Clean, focused design with black and white theme
+- **Accessible**: High contrast, clear typography, keyboard navigation
+- **Responsive**: Mobile-first design that scales beautifully
+- **Intuitive**: Logical navigation with breadcrumbs and clear actions
+
+### Key Pages
+- **Dashboard**: Overview with KPIs and quick actions
+- **Inventory**: Item management with search and filtering
+- **Movements**: Dispatch creation and tracking
+- **Reports**: Analytics with charts and export options
+- **Users**: User management (Super Admin only)
+- **Settings**: System configuration (Super Admin only)
+
+## 🔐 Permissions Matrix
+
+| Feature | Super Admin | Operation | Store Keeper |
+|---------|-------------|-----------|--------------|
+| View Dashboard | ✅ | ✅ | ✅ |
+| View Inventory | ✅ | ✅ | ✅ |
+| Add/Edit Items | ✅ | ➖ (edit qty) | ✅ |
+| Delete Items | ✅ | ❌ | ❌ |
+| Create Dispatch | ✅ | ✅ | ❌ |
+| Authorize Dispatch | ✅ | ✅ | ❌ |
+| Register Returns | ✅ | ✅ | ✅ |
+| View Reports | ✅ | ✅ | ✅ |
+| Manage Users | ✅ | ❌ | ❌ |
+| System Settings | ✅ | ❌ | ❌ |
+
+## 📊 Data Model
+
+### Core Entities
+- **Items**: Inventory items with quantities and locations
+- **Movements**: Dispatches and rentals with customer information
+- **Returns**: Return records with quantities and dates
+- **Users**: System users with roles and permissions
+
+### Business Logic
+- Stock levels automatically adjust with dispatches and returns
+- Overdue tracking based on expected return dates
+- Role-based UI rendering and action availability
+- Real-time statistics calculation
+
+## 🚧 Development Notes
+
+### Current Limitations
+- **Frontend Only**: No backend or database (data resets on refresh)
+- **Mock Authentication**: Simple role selection without real security
+- **In-Memory Storage**: All data stored in browser memory
+- **No Persistence**: Data is lost when the page is refreshed
+
+### Future Enhancements
+- Backend API integration
+- Real authentication and authorization
+- Database persistence
+- Real-time notifications
+- Advanced reporting features
+- Mobile app companion
+
+## 🎨 Customization
+
+### Theme
+The system uses a black and white theme with support for dark/light modes. Colors can be customized in `app/globals.css`:
+
+```css
+:root {
+  --primary: 0 0% 9%;
+  --secondary: 0 0% 96.1%;
+  /* ... other variables */
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Components
+All UI components are built with shadcn/ui and can be customized in the `components/ui/` directory.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📈 Performance
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Optimized Bundle**: Tree-shaking and code splitting
+- **Fast Navigation**: Client-side routing with Next.js
+- **Efficient State**: Zustand for minimal re-renders
+- **Responsive Images**: Next.js Image optimization
+- **Lazy Loading**: Components loaded on demand
 
-## Learn More
+## 🧪 Testing
 
-To learn more about Next.js, take a look at the following resources:
+The system has been manually tested across:
+- **Browsers**: Chrome, Firefox, Safari, Edge
+- **Devices**: Desktop, tablet, mobile
+- **Roles**: All three user roles with their permissions
+- **Workflows**: Complete inventory and movement workflows
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is part of a portfolio demonstration and is not licensed for commercial use.
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This is a demonstration project. For suggestions or improvements, please contact the developer.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+**Built with ❤️ for Wagesa Event Co**
+
+*A modern solution for inventory management in the events industry.*# wagesa
