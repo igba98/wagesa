@@ -16,7 +16,7 @@ export default function SplashPage() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
-            Wagesa
+            Wegesa
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-medium text-muted-foreground">
             Event Co

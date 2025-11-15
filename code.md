@@ -1,4 +1,4 @@
-Wagesa Event Co — Inventory & Asset Movement System (Frontend‑Only v1)
+Wegesa Event Co — Inventory & Asset Movement System (Frontend‑Only v1)
 
 A complete plan and Cursor-ready instructions to build a hardcoded (in‑memory) inventory & movement tracker for an event rentals company. No backend or database yet — all data lives in React state (lost on refresh). The design uses Next.js (App Router) + TypeScript + Tailwind CSS + shadcn/ui + Heroicons, with Zustand for state and Framer Motion for the splash animation. Recharts is used for simple charts on the Reports page.
 
@@ -358,7 +358,7 @@ export default function Splash() {
   const router = useRouter();
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <motion.h1 initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} className="text-4xl font-bold tracking-tight">Wagesa Event Co</motion.h1>
+      <motion.h1 initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} className="text-4xl font-bold tracking-tight">Wegesa Event Co</motion.h1>
       <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.2}} className="mt-2 text-muted-foreground">Inventory & Movement Tracker</motion.p>
       <motion.button whileHover={{scale:1.02}} whileTap={{scale:0.98}} onClick={()=>router.push('/login')} className="mt-8 rounded-2xl bg-black text-white px-6 py-3">Enter</motion.button>
     </div>
@@ -443,7 +443,7 @@ export default function Sidebar(){
   const logout = useApp(s=>s.logout);
   return (
     <aside className="h-screen border-r bg-white p-4">
-      <div className="text-lg font-semibold">Wagesa</div>
+      <div className="text-lg font-semibold">Wegesa</div>
       <nav className="mt-6 space-y-1">
         {nav.filter(n=>!n.role || n.role===role).map(({href,label,icon:Icon})=>{
           const active = path.startsWith(href);
@@ -1055,7 +1055,7 @@ export default function Settings(){
 
 18) Cursor‑Only Build Instructions (Copy/Paste into Cursor)
 
-You are an AI pair‑programmer. Build a front‑end‑only, in‑memory prototype for “Wagesa Inventory System” using Next.js (App Router) + TypeScript + Tailwind + shadcn/ui + Heroicons + Zustand + RHF + Zod + framer‑motion + date‑fns. No backend, no localStorage; all state is volatile and resets on refresh. Implement role‑based UI for: SUPER_ADMIN, OPERATIONS, STORE_KEEPER.
+You are an AI pair‑programmer. Build a front‑end‑only, in‑memory prototype for "Wegesa Inventory System" using Next.js (App Router) + TypeScript + Tailwind + shadcn/ui + Heroicons + Zustand + RHF + Zod + framer‑motion + date‑fns. No backend, no localStorage; all state is volatile and resets on refresh. Implement role‑based UI for: SUPER_ADMIN, OPERATIONS, STORE_KEEPER.
 
 0) Create project & install deps
 
@@ -1321,7 +1321,7 @@ export default function Splash() {
   return (
     <div className="grid place-items-center h-[100svh] p-6">
       <motion.div initial={{ opacity: 0, scale: .9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .6 }} className="text-center">
-        <motion.h1 className="text-4xl font-bold">Wagesa Inventory</motion.h1>
+        <motion.h1 className="text-4xl font-bold">Wegesa Inventory</motion.h1>
         <p className="mt-2 text-gray-600">Track materials, rentals & movement between Boba and Mikocheni.</p>
         <Link href="/login" className="inline-flex mt-8 px-6 py-3 rounded-2xl bg-black text-white">Enter</Link>
       </motion.div>
@@ -1455,7 +1455,7 @@ function Header() {
   const logout = useAuth(s => s.logout);
   return (
     <div className="flex items-center justify-between">
-      <h1 className="text-xl font-semibold">Wagesa Inventory</h1>
+      <h1 className="text-xl font-semibold">Wegesa Inventory</h1>
       <button onClick={logout} className="px-3 py-1 rounded-xl bg-gray-900 text-white">Logout</button>
     </div>
   );
@@ -1607,7 +1607,7 @@ Add a lightweight role gate: Wrap privileged buttons/sections with <RoleGate all
 	•	Keep components client-side where they use Zustand/hooks.
 	•	Keep UI clean, minimal, and touch-friendly.
 
-Deliverable: A running Next.js app where all above screens function with in‑memory state and role‑based UI, suitable for demo to Wagesa Event Co.
+Deliverable: A running Next.js app where all above screens function with in‑memory state and role‑based UI, suitable for demo to Wegesa Event Co.
 
 
 note: colours for project are black and white only 

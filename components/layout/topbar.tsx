@@ -35,7 +35,7 @@ export default function Topbar() {
 
           {/* Mobile Title - Shorter */}
           <div className="sm:hidden">
-            <h1 className="text-base font-semibold">Wagesa</h1>
+            <h1 className="text-base font-semibold">Wegesa</h1>
             <p className="text-xs text-muted-foreground">Inventory</p>
           </div>
         </div>

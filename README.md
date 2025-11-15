@@ -1,4 +1,4 @@
-# Wagesa Event Co - Inventory Management System
+# Wegesa Event Co - Inventory Management System
 
 A modern, responsive inventory and asset movement tracking system built for event rental companies. This frontend-only prototype demonstrates a complete inventory management workflow with role-based access control.
 
@@ -179,6 +179,6 @@ This is a demonstration project. For suggestions or improvements, please contact
 
 ---
 
-**Built with ❤️ for Wagesa Event Co**
+**Built with ❤️ for Wegesa Event Co**
 
 *A modern solution for inventory management in the events industry.*# wagesa

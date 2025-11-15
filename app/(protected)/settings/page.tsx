@@ -32,7 +32,7 @@ export default function SettingsPage() {
 
   // Mock settings state
   const [settings, setSettings] = useState({
-    companyName: "Wagesa Event Co",
+    companyName: "Wegesa Event Co",
     defaultStore: "BOBA",
     emailNotifications: true,
     smsNotifications: false,

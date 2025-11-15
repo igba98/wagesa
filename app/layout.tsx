@@ -11,7 +11,7 @@ const urbanist = Urbanist({
 });
 
 export const metadata: Metadata = {
-  title: "Wagesa Event Co - Inventory Management",
+  title: "Wegesa Event Co - Inventory Management",
   description:
     "Professional inventory and asset movement tracking system for event rentals",
 };

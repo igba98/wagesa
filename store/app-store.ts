@@ -2,7 +2,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { addDays, formatISO } from 'date-fns';
-import { Role, StoreId, User, Item, DispatchLine, Movement, ReturnRecord } from '@/lib/types';
+import { 
+  Role, StoreId, User, Item, DispatchLine, Movement, ReturnRecord,
+  Employee, Invoice, Transaction, BookedEvent
+} from '@/lib/types';
 
 interface AppState {
   currentUser: User | null;
@@ -10,6 +13,12 @@ interface AppState {
   items: Item[];
   movements: Movement[];
   returns: ReturnRecord[];
+  
+  // New features
+  employees: Employee[];
+  invoices: Invoice[];
+  transactions: Transaction[];
+  bookedEvents: BookedEvent[];
   
   // Theme state
   isDarkMode: boolean;
@@ -32,6 +41,27 @@ interface AppState {
   // Movement management
   createDispatch: (m: Omit<Movement, 'id' | 'createdAt' | 'status'>) => { id: string };
   registerReturn: (movementId: string, r: Omit<ReturnRecord, 'id' | 'returnedAt'>) => void;
+  
+  // Employee management
+  addEmployee: (e: Omit<Employee, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateEmployee: (id: string, patch: Partial<Employee>) => void;
+  deleteEmployee: (id: string) => void;
+  
+  // Invoice management
+  addInvoice: (i: Omit<Invoice, 'id' | 'invoiceNumber' | 'createdAt' | 'updatedAt'>) => void;
+  updateInvoice: (id: string, patch: Partial<Invoice>) => void;
+  deleteInvoice: (id: string) => void;
+  getNextInvoiceNumber: () => string;
+  
+  // Transaction management
+  addTransaction: (t: Omit<Transaction, 'id' | 'createdAt'>) => void;
+  updateTransaction: (id: string, patch: Partial<Transaction>) => void;
+  deleteTransaction: (id: string) => void;
+  
+  // Booking management
+  addBooking: (b: Omit<BookedEvent, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateBooking: (id: string, patch: Partial<BookedEvent>) => void;
+  deleteBooking: (id: string) => void;
 }
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -43,9 +73,9 @@ export const useApp = create<AppState>()(
     
     // Seed data
     users: [
-      { id: 'u1', name: 'Asha M.', email: 'asha@wagesa.co', role: 'SUPER_ADMIN', isActive: true },
-      { id: 'u2', name: 'Jonas K.', email: 'jonas@wagesa.co', role: 'OPERATION', isActive: true },
-      { id: 'u3', name: 'Neema D.', email: 'neema@wagesa.co', role: 'STORE_KEEPER', isActive: true },
+      { id: 'u1', name: 'Asha M.', email: 'asha@wegesa.co', role: 'SUPER_ADMIN', isActive: true },
+      { id: 'u2', name: 'Jonas K.', email: 'jonas@wegesa.co', role: 'OPERATION', isActive: true },
+      { id: 'u3', name: 'Neema D.', email: 'neema@wegesa.co', role: 'STORE_KEEPER', isActive: true },
     ],
     
     items: [
@@ -58,6 +88,40 @@ export const useApp = create<AppState>()(
     
     movements: [],
     returns: [],
+    
+    // New features seed data
+    employees: [
+      {
+        id: 'emp1',
+        fullName: 'John Mwangi',
+        dateOfBirth: '1990-05-15',
+        gender: 'MALE',
+        position: 'Event Coordinator',
+        mobileContact: '+255 712 345 678',
+        contractStartDate: '2023-01-15',
+        contractEndDate: '2025-01-14',
+        isActive: true,
+        createdAt: formatISO(new Date()),
+        updatedAt: formatISO(new Date()),
+      },
+      {
+        id: 'emp2',
+        fullName: 'Sarah Komba',
+        dateOfBirth: '1992-08-22',
+        gender: 'FEMALE',
+        position: 'Store Manager',
+        mobileContact: '+255 713 456 789',
+        contractStartDate: '2023-03-01',
+        contractEndDate: '2025-02-28',
+        isActive: true,
+        createdAt: formatISO(new Date()),
+        updatedAt: formatISO(new Date()),
+      },
+    ],
+    
+    invoices: [],
+    transactions: [],
+    bookedEvents: [],
 
     // Theme methods
     toggleDarkMode: () => set(state => ({ isDarkMode: !state.isDarkMode })),
@@ -147,6 +211,128 @@ export const useApp = create<AppState>()(
         movements: state.movements.map(m => 
           m.id === movementId ? { ...m, status } : m
         )
+      }));
+    },
+
+    // Employee management methods
+    addEmployee: (e) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        employees: [...state.employees, {
+          ...e,
+          id: uid(),
+          createdAt: now,
+          updatedAt: now,
+        }]
+      }));
+    },
+
+    updateEmployee: (id, patch) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        employees: state.employees.map(e =>
+          e.id === id ? { ...e, ...patch, updatedAt: now } : e
+        )
+      }));
+    },
+
+    deleteEmployee: (id) => {
+      set(state => ({
+        employees: state.employees.filter(e => e.id !== id)
+      }));
+    },
+
+    // Invoice management methods
+    getNextInvoiceNumber: () => {
+      const invoices = get().invoices;
+      const year = new Date().getFullYear();
+      const yearInvoices = invoices.filter(inv => 
+        inv.invoiceNumber.startsWith(`WGS-${year}`)
+      );
+      const nextNumber = yearInvoices.length + 1;
+      return `WGS-${year}-${String(nextNumber).padStart(3, '0')}`;
+    },
+
+    addInvoice: (i) => {
+      const now = formatISO(new Date());
+      const invoiceNumber = get().getNextInvoiceNumber();
+      set(state => ({
+        invoices: [...state.invoices, {
+          ...i,
+          id: uid(),
+          invoiceNumber,
+          createdAt: now,
+          updatedAt: now,
+        }]
+      }));
+    },
+
+    updateInvoice: (id, patch) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        invoices: state.invoices.map(inv =>
+          inv.id === id ? { ...inv, ...patch, updatedAt: now } : inv
+        )
+      }));
+    },
+
+    deleteInvoice: (id) => {
+      set(state => ({
+        invoices: state.invoices.filter(inv => inv.id !== id)
+      }));
+    },
+
+    // Transaction management methods
+    addTransaction: (t) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        transactions: [...state.transactions, {
+          ...t,
+          id: uid(),
+          createdAt: now,
+        }]
+      }));
+    },
+
+    updateTransaction: (id, patch) => {
+      set(state => ({
+        transactions: state.transactions.map(t =>
+          t.id === id ? { ...t, ...patch } : t
+        )
+      }));
+    },
+
+    deleteTransaction: (id) => {
+      set(state => ({
+        transactions: state.transactions.filter(t => t.id !== id)
+      }));
+    },
+
+    // Booking management methods
+    addBooking: (b) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        bookedEvents: [...state.bookedEvents, {
+          ...b,
+          id: uid(),
+          createdAt: now,
+          updatedAt: now,
+        }]
+      }));
+    },
+
+    updateBooking: (id, patch) => {
+      const now = formatISO(new Date());
+      set(state => ({
+        bookedEvents: state.bookedEvents.map(b =>
+          b.id === id ? { ...b, ...patch, updatedAt: now } : b
+        )
+      }));
+    },
+
+    deleteBooking: (id) => {
+      set(state => ({
+        bookedEvents: state.bookedEvents.filter(b => b.id !== id)
       }));
     },
   }))

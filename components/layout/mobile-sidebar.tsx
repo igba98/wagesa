@@ -25,6 +25,9 @@ import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
   XMarkIcon,
+  UsersIcon,
+  BanknotesIcon,
+  CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
 const navigationItems = [
@@ -45,6 +48,27 @@ const navigationItems = [
     label: "Movements",
     icon: ArrowPathIcon,
     description: "Dispatches and rentals",
+  },
+  {
+    href: "/bookings",
+    label: "Bookings",
+    icon: CalendarDaysIcon,
+    description: "Event bookings",
+    permission: "viewBookings" as const,
+  },
+  {
+    href: "/hr",
+    label: "Human Resource",
+    icon: UsersIcon,
+    description: "Employee management",
+    permission: "viewEmployees" as const,
+  },
+  {
+    href: "/finance",
+    label: "Finance",
+    icon: BanknotesIcon,
+    description: "Invoices & transactions",
+    permission: "viewFinance" as const,
   },
   {
     href: "/reports",
@@ -152,10 +176,10 @@ export default function MobileSidebar() {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-1"
               >
-                <h2 className="text-lg font-semibold tracking-tight">Wagesa</h2>
-                <p className="text-xs text-muted-foreground">
-                  Inventory Management
-                </p>
+            <h2 className="text-lg font-semibold tracking-tight">Wegesa</h2>
+            <p className="text-xs text-muted-foreground">
+              Inventory Management
+            </p>
               </motion.div>
             </div>
           </div>

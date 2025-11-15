@@ -202,7 +202,7 @@ export default function ReportsPage() {
 
     // Summary sheet
     const summaryData = [
-      ["Wagesa Event Co - Inventory Report"],
+      ["Wegesa Event Co - Inventory Report"],
       ["Generated:", new Date().toLocaleString()],
       [
         "Period:",
@@ -294,7 +294,7 @@ export default function ReportsPage() {
     });
     saveAs(
       data,
-      `Wagesa_Inventory_Report_${format(new Date(), "yyyy-MM-dd")}.xlsx`
+      `Wegesa_Inventory_Report_${format(new Date(), "yyyy-MM-dd")}.xlsx`
     );
 
     toast.success("Excel report exported successfully!");

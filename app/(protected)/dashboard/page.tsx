@@ -20,14 +20,27 @@ import {
   UserPlusIcon,
   ChartBarIcon,
   ExclamationTriangleIcon,
+  UsersIcon,
+  BanknotesIcon,
+  CalendarDaysIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { isAfter } from "date-fns";
+import { isAfter, isSameMonth, parseISO } from "date-fns";
 
 export default function DashboardPage() {
-  const { items, movements, currentUser } = useApp();
+  const { 
+    items, 
+    movements, 
+    currentUser, 
+    employees, 
+    invoices, 
+    transactions, 
+    bookedEvents 
+  } = useApp();
 
   const stats = useMemo(() => {
+    // Inventory stats
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
     const inStock = items.reduce((sum, item) => sum + item.inStock, 0);
     const out = totalItems - inStock;
@@ -39,14 +52,58 @@ export default function DashboardPage() {
         m.status === "OUT" && isAfter(new Date(), new Date(m.expectedReturnAt))
     ).length;
 
+    // HR stats
+    const totalEmployees = employees.length;
+    const activeEmployees = employees.filter((e) => e.isActive).length;
+
+    // Finance stats
+    const totalInvoices = invoices.length;
+    const paidInvoices = invoices.filter((i) => i.status === "PAID").length;
+    const totalRevenue = invoices
+      .filter((i) => i.status === "PAID")
+      .reduce((sum, i) => sum + i.total, 0);
+    const pendingInvoices = invoices.filter(
+      (i) => i.status === "DRAFT" || i.status === "SENT"
+    ).length;
+    const totalIncome = transactions
+      .filter((t) => t.type === "INCOME")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = transactions
+      .filter((t) => t.type === "EXPENSE")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const netProfit = totalIncome - totalExpense;
+
+    // Bookings stats
+    const totalBookings = bookedEvents.length;
+    const confirmedBookings = bookedEvents.filter(
+      (b) => b.status === "CONFIRMED"
+    ).length;
+    const thisMonthBookings = bookedEvents.filter((b) =>
+      isSameMonth(parseISO(b.eventDate), new Date())
+    ).length;
+    const totalBookingRevenue = bookedEvents
+      .filter((b) => b.isPaid && b.status !== "CANCELLED")
+      .reduce((sum, b) => sum + b.amount, 0);
+
     return {
       totalItems,
       inStock,
       out,
       activeRentals,
       overdueReturns,
+      totalEmployees,
+      activeEmployees,
+      totalInvoices,
+      paidInvoices,
+      totalRevenue,
+      pendingInvoices,
+      netProfit,
+      totalBookings,
+      confirmedBookings,
+      thisMonthBookings,
+      totalBookingRevenue,
     };
-  }, [items, movements]);
+  }, [items, movements, employees, invoices, transactions, bookedEvents]);
 
   const recentMovements = movements
     .slice(0, 5)
@@ -65,19 +122,35 @@ export default function DashboardPage() {
       permission: "createDispatch" as const,
     },
     {
-      title: "Register Return",
-      description: "Process returned items",
-      href: "/movements",
-      icon: ArrowPathIcon,
+      title: "New Booking",
+      description: "Book a new event",
+      href: "/bookings",
+      icon: CalendarDaysIcon,
+      color: "bg-pink-500",
+      permission: "createBooking" as const,
+    },
+    {
+      title: "Create Invoice",
+      description: "Generate new invoice",
+      href: "/finance",
+      icon: DocumentTextIcon,
       color: "bg-green-500",
-      permission: "confirmReturn" as const,
+      permission: "createInvoice" as const,
+    },
+    {
+      title: "Add Employee",
+      description: "Register new employee",
+      href: "/hr",
+      icon: UsersIcon,
+      color: "bg-purple-500",
+      permission: "addEmployee" as const,
     },
     {
       title: "Add Item",
       description: "Add new inventory item",
       href: "/inventory",
       icon: ClipboardDocumentListIcon,
-      color: "bg-purple-500",
+      color: "bg-orange-500",
       permission: "addItem" as const,
     },
     {
@@ -85,16 +158,8 @@ export default function DashboardPage() {
       description: "Analytics and insights",
       href: "/reports",
       icon: ChartBarIcon,
-      color: "bg-orange-500",
+      color: "bg-indigo-500",
       permission: "viewReports" as const,
-    },
-    {
-      title: "Manage Users",
-      description: "User administration",
-      href: "/users",
-      icon: UserPlusIcon,
-      color: "bg-pink-500",
-      permission: "manageUsers" as const,
     },
   ];
 
@@ -234,6 +299,73 @@ export default function DashboardPage() {
           </Card>
         </motion.div>
       </div>
+
+      {/* New Module KPIs */}
+      {can.viewFinance(currentUser?.role || "STORE_KEEPER") && (
+        <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <BanknotesIcon className="h-4 w-4" />
+                Revenue
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl lg:text-2xl font-bold text-green-600 dark:text-green-400">
+                {stats.totalRevenue.toLocaleString()} TZS
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {stats.paidInvoices} paid invoices
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <DocumentTextIcon className="h-4 w-4" />
+                Net Profit
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={`text-xl lg:text-2xl font-bold ${stats.netProfit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
+                {stats.netProfit.toLocaleString()} TZS
+              </div>
+              <p className="text-xs text-muted-foreground">Income - Expenses</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <UsersIcon className="h-4 w-4" />
+                Employees
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl lg:text-2xl font-bold">{stats.totalEmployees}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.activeEmployees} active
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <CalendarDaysIcon className="h-4 w-4" />
+                Bookings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl lg:text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {stats.thisMonthBookings}
+              </div>
+              <p className="text-xs text-muted-foreground">This month</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div className="grid gap-4 md:gap-6 lg:grid-cols-3">
         {/* Quick Actions */}

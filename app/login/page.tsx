@@ -86,7 +86,7 @@ export default function LoginPage() {
             <CardHeader className="text-center space-y-2">
               <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
               <CardDescription>
-                Sign in to access the Wagesa inventory system
+                Sign in to access the Wegesa inventory system
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
